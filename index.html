@@ -125,11 +125,28 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
 /* ── Goals ── */
 .goal-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
 .goal-row:last-child{border-bottom:none}
-.goal-name{font-size:13px;font-weight:500;flex:1;min-width:0}
-.goal-amounts{font-size:12px;color:var(--text2);white-space:nowrap}
-.goal-bar-wrap{width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}
+.goal-main{flex:1;min-width:0}
+.goal-name{font-size:13px;font-weight:600;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.goal-amounts{font-size:12px;color:var(--text2)}
+.goal-bar-wrap{width:80px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}
 .goal-bar{height:100%;border-radius:3px;background:var(--green);transition:width .4s}
-.goal-pct{font-size:12px;color:var(--green);min-width:30px;text-align:right;font-weight:600}
+.goal-pct{font-size:12px;color:var(--green);min-width:34px;text-align:right;font-weight:700}
+.goal-actions{display:flex;gap:4px;flex-shrink:0}
+.btn-goal-add{background:var(--green-bg);border:1.5px solid var(--green);border-radius:8px;width:30px;height:30px;font-size:17px;font-weight:700;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;line-height:1}
+.btn-goal-add:active{opacity:.7}
+.btn-goal-edit{background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;width:30px;height:30px;font-size:14px;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn-goal-edit:active{background:var(--border)}
+/* Versement inline */
+.goal-versement{display:none;padding:8px 0 4px;align-items:center;gap:8px}
+.goal-versement.open{display:flex}
+.goal-versement input{flex:1;min-width:0;font-size:15px!important;padding:8px 10px!important}
+.btn-goal-ok{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation;white-space:nowrap;font-family:inherit}
+.btn-goal-ok:active{opacity:.8}
+.btn-goal-cancel{background:none;border:1px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;color:var(--text2);font-family:inherit;touch-action:manipulation}
+/* Edit inline */
+.goal-edit-row{display:none;padding:8px 0 4px;gap:8px;flex-wrap:wrap}
+.goal-edit-row.open{display:flex}
+.goal-edit-row input{flex:1;min-width:110px;font-size:14px!important;padding:8px 10px!important}
 
 /* ── Notes ── */
 .notes-area{width:100%;min-height:90px;padding:12px;resize:vertical;font-size:15px;border-radius:10px;background:var(--input-bg);border:1px solid var(--border);font-family:inherit;line-height:1.5}
@@ -258,6 +275,64 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
 @media(min-width:768px){.toast{bottom:28px}}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── Calculatrice popup ── */
+.btn-calc{
+  background:var(--amber-bg);border:1px solid var(--amber);
+  border-radius:8px;padding:5px 9px;font-size:14px;cursor:pointer;
+  color:var(--amber);line-height:1;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  display:inline-flex;align-items:center;gap:4px;font-weight:600;
+}
+.btn-calc:active{opacity:.7}
+.calc-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.45);z-index:700;
+  align-items:flex-end;justify-content:center;
+  padding-bottom:var(--safe);
+}
+@media(min-width:560px){.calc-overlay{align-items:center}}
+.calc-overlay.open{display:flex}
+.calc-popup{
+  background:var(--surface);width:100%;max-width:440px;
+  border-radius:20px 20px 0 0;padding:20px 18px 24px;
+  box-shadow:0 -4px 30px rgba(0,0,0,.15);
+  animation:slideup .2s ease;
+  max-height:85vh;overflow-y:auto;
+}
+@media(min-width:560px){
+  .calc-popup{border-radius:16px;padding:22px 20px;animation:popin .18s ease}
+}
+.calc-popup-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+@media(min-width:560px){.calc-popup-handle{display:none}}
+.calc-popup-title{font-size:15px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.calc-popup-sub{font-size:12px;color:var(--text2);margin-bottom:16px}
+/* Lignes de la section dans la calc */
+.calc-line{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;border-bottom:1px solid var(--border);
+}
+.calc-line:last-child{border-bottom:none}
+.calc-line-name{font-size:13px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.calc-line-input{
+  width:140px;text-align:right;font-size:15px!important;
+  padding:7px 10px!important;flex-shrink:0;
+  font-family:inherit;
+}
+.calc-line-input.expr{border-color:var(--amber)!important;background:#FAEEDA!important;color:var(--amber)!important}
+.calc-line-preview{font-size:11px;color:var(--amber);font-weight:600;min-width:60px;text-align:right;flex-shrink:0}
+/* Total live */
+.calc-total-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:14px 0 16px;padding:10px 14px;
+  background:var(--input-bg);border-radius:10px;
+}
+.calc-total-label{font-size:13px;color:var(--text2);font-weight:500}
+.calc-total-val{font-size:18px;font-weight:800;color:var(--text)}
+/* Actions */
+.calc-actions{display:flex;gap:10px}
+.calc-actions .btn-cancel{flex:1}
+.calc-actions .btn-modal-confirm{flex:2;background:var(--amber)}
+
 /* ── Misc ── */
 .empty{font-size:13px;color:var(--text3);font-style:italic;padding:6px 0}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -310,26 +385,37 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
       <div class="metric-label">✅ Solde restant</div>
       <div class="metric-value" id="m-balance" style="color:var(--green)">0 €</div>
     </div>
+    <div class="metric" style="background:#EEEDFE;grid-column:1/-1">
+      <div class="metric-label">💹 Taux d'épargne</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+        <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div id="savings-bar" style="height:100%;border-radius:4px;background:#7F77DD;transition:width .4s;width:0%"></div>
+        </div>
+        <div class="metric-value" id="m-savings-rate" style="color:#7F77DD;font-size:16px">0%</div>
+      </div>
+    </div>
+    <div class="metric" style="background:var(--amber-bg);grid-column:1/-1">
+      <div class="metric-label">📊 Fixes vs Variables</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+        <span style="font-size:12px;color:var(--red);font-weight:600;white-space:nowrap" id="m-fixed-total">Fixes : 0 €</span>
+        <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div id="fixed-ratio-bar" style="height:100%;border-radius:4px;background:var(--red);transition:width .4s;width:0%"></div>
+        </div>
+        <span style="font-size:12px;color:#7F77DD;font-weight:600;white-space:nowrap" id="m-variable-total">Variables : 0 €</span>
+      </div>
+    </div>
   </div>
 
   <div class="section">
-    <div class="section-header"><span class="section-title">💼 Revenus du mois</span></div>
-    <div class="salary-grid">
-      <div>
-        <label class="salary-label">Salaire net</label>
-        <div class="salary-input-wrap">
-          <input type="number" id="salary" class="salary-input" placeholder="0" inputmode="decimal" oninput="autosave()">
-          <span class="salary-unit">€</span>
-        </div>
-      </div>
-      <div>
-        <label class="salary-label">Autres revenus</label>
-        <div class="salary-input-wrap">
-          <input type="number" id="other-income" class="salary-input" placeholder="0" inputmode="decimal" oninput="autosave()">
-          <span class="salary-unit">€</span>
-        </div>
+    <div class="section-header">
+      <span class="section-title">💼 Revenus du mois</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="total-revenus" style="font-size:13px;font-weight:600;color:var(--green)">0 €</span>
+        <button class="btn-calc" onclick="openCalc('revenus')" title="Calculatrice">🧮</button>
+        <button class="btn-add" onclick="addRevenuRow()">+ Revenu</button>
       </div>
     </div>
+    <div id="cat-revenus"></div>
   </div>
 
   <div class="section">
@@ -398,6 +484,7 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
       <span class="section-title">🏠 Logement & charges</span>
       <div style="display:flex;align-items:center;gap:8px">
         <span id="total-fixed" style="font-size:13px;font-weight:600;color:var(--red)">0 €</span>
+        <button class="btn-calc" onclick="openCalc('fixed')" title="Calculatrice">🧮</button>
         <button class="btn-add" onclick="addCatRow('fixed')">+ Cat.</button>
       </div>
     </div>
@@ -408,6 +495,7 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
       <span class="section-title">🛒 Variable & loisirs</span>
       <div style="display:flex;align-items:center;gap:8px">
         <span id="total-variable" style="font-size:13px;font-weight:600;color:var(--purple)">0 €</span>
+        <button class="btn-calc" onclick="openCalc('variable')" title="Calculatrice">🧮</button>
         <button class="btn-add" onclick="addCatRow('variable')">+ Cat.</button>
       </div>
     </div>
@@ -418,6 +506,7 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
       <span class="section-title">🚗 Transport</span>
       <div style="display:flex;align-items:center;gap:8px">
         <span id="total-transport" style="font-size:13px;font-weight:600;color:var(--blue)">0 €</span>
+        <button class="btn-calc" onclick="openCalc('transport')" title="Calculatrice">🧮</button>
         <button class="btn-add" onclick="addCatRow('transport')">+ Cat.</button>
       </div>
     </div>
@@ -428,6 +517,7 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
       <span class="section-title">⋯ Autres</span>
       <div style="display:flex;align-items:center;gap:8px">
         <span id="total-autres" style="font-size:13px;font-weight:600;color:var(--amber)">0 €</span>
+        <button class="btn-calc" onclick="openCalc('autres')" title="Calculatrice">🧮</button>
         <button class="btn-add" onclick="addCatRow('autres')">+ Cat.</button>
       </div>
     </div>
@@ -593,6 +683,24 @@ select{padding:9px 10px;font-size:15px;cursor:pointer}
   <button class="bnav-item"        data-tab="annuel"          onclick="showTab('annuel',this)"><span class="bnav-icon">📅</span>Annuel</button>
 </nav>
 
+<!-- ════ CALC POPUP ════ -->
+<div class="calc-overlay" id="calc-overlay" onclick="if(event.target===this)closeCalc()">
+  <div class="calc-popup">
+    <div class="calc-popup-handle"></div>
+    <div class="calc-popup-title"><span>🧮</span><span id="calc-popup-title">Calculatrice</span></div>
+    <div class="calc-popup-sub">Tape un nombre ou une expression (ex : <b>450 + 30</b>). Appuie sur Entrée ou change de champ pour calculer.</div>
+    <div id="calc-lines"></div>
+    <div class="calc-total-bar">
+      <span class="calc-total-label">Total section</span>
+      <span class="calc-total-val" id="calc-total">0 €</span>
+    </div>
+    <div class="calc-actions">
+      <button class="btn-cancel" onclick="closeCalc()">Annuler</button>
+      <button class="btn-modal-confirm" style="background:var(--amber)" onclick="applyCalc()">✓ Appliquer</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ COPY MODAL ════ -->
 <div class="modal-overlay" id="copy-modal" onclick="if(event.target===this)closeCopyModal()">
   <div class="modal">
@@ -642,7 +750,8 @@ const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 
 function defaultData(){
   return{
-    salary:"",otherIncome:"",notes:"",
+    revenus:[{id:"r1",name:"Salaire net",val:""},{id:"r2",name:"Autres revenus",val:""}],
+    notes:"",
     fixed:[{id:1,name:"Loyer",val:""},{id:2,name:"Électricité",val:""},{id:3,name:"Internet",val:""},{id:4,name:"Assurance",val:""}],
     variable:[{id:1,name:"Courses",val:""},{id:2,name:"Restaurants",val:""},{id:3,name:"Sorties",val:""},{id:4,name:"Vêtements",val:""}],
     transport:[{id:1,name:"Essence",val:""},{id:2,name:"Transport en commun",val:""}],
@@ -669,6 +778,14 @@ function loadData(y,m){
       if(!d.investCats) d.investCats=JSON.parse(JSON.stringify(INV_CATS_DEF));
       if(!d.goals)  d.goals=[];
       if(!d.dettes) d.dettes=[];
+      // Migration : ancien format salary/otherIncome → revenus[]
+      if(!d.revenus){
+        d.revenus=[
+          {id:"r1",name:"Salaire net",val:d.salary||""},
+          {id:"r2",name:"Autres revenus",val:d.otherIncome||""}
+        ];
+        delete d.salary; delete d.otherIncome;
+      }
       return d;
     }
   }catch(e){}
@@ -680,9 +797,12 @@ function saveDataDirect(){
 }
 
 function collectFromDOM(){
-  DATA.salary=document.getElementById("salary").value;
-  DATA.otherIncome=document.getElementById("other-income").value;
   DATA.notes=document.getElementById("notes").value;
+  // Revenus dynamiques
+  DATA.revenus=[];
+  document.querySelectorAll("#cat-revenus .cat-row").forEach(r=>{
+    DATA.revenus.push({id:r.dataset.id,name:r.querySelector(".cat-name-input").value,val:r.querySelector(".cat-val-input").value});
+  });
   ["fixed","variable","transport","autres"].forEach(cat=>{
     DATA[cat]=[];
     document.querySelectorAll("#cat-"+cat+" .cat-row").forEach(r=>{
@@ -709,9 +829,8 @@ function autosave(){saveData();}
 function load(){
   DATA=loadData(Y,M);
   document.getElementById("monthLabel").textContent=MONTHS[M]+" "+Y;
-  document.getElementById("salary").value=DATA.salary||"";
-  document.getElementById("other-income").value=DATA.otherIncome||"";
   document.getElementById("notes").value=DATA.notes||"";
+  renderRevenus();
   renderAllCats();
   renderInvest();
   renderGoals();
@@ -719,7 +838,33 @@ function load(){
   updateAll();
 }
 
-// ── Categories
+// ── Revenus
+function renderRevenus(){
+  const cont=document.getElementById("cat-revenus");cont.innerHTML="";
+  (DATA.revenus||[]).forEach(item=>appendRevenuRow(item));
+}
+
+function appendRevenuRow(item){
+  const cont=document.getElementById("cat-revenus");
+  const div=document.createElement("div");div.className="cat-row";div.dataset.id=item.id;
+  div.innerHTML=`
+    <input type="text" class="cat-name-input" value="${esc(item.name)}" oninput="autosave()">
+    <input type="number" class="cat-val-input" value="${item.val||""}" placeholder="0" inputmode="decimal" oninput="autosave()">
+    <span style="font-size:13px;color:var(--text3);flex-shrink:0">€</span>
+    <div class="cat-bar-wrap"><div class="cat-bar" style="width:0%;background:var(--green)"></div></div>
+    <span class="cat-pct">0%</span>
+    <button class="btn-del" onclick="this.closest('.cat-row').remove();autosave()">×</button>`;
+  cont.appendChild(div);
+}
+
+function addRevenuRow(){
+  const name=prompt("Nom du revenu (ex: CAF, Vinted, Prime…) :");
+  if(!name)return;
+  const item={id:Date.now(),name,val:""};
+  DATA.revenus.push(item);appendRevenuRow(item);autosave();
+}
+
+
 function renderAllCats(){
   ["fixed","variable","transport","autres"].forEach(cat=>{
     document.getElementById("cat-"+cat).innerHTML="";
@@ -848,12 +993,87 @@ function addInvestCard(){
 function renderGoals(){
   const list=document.getElementById("goals-list");list.innerHTML="";
   if(!DATA.goals||!DATA.goals.length){list.innerHTML='<p class="empty">Aucun objectif défini</p>';return;}
-  DATA.goals.forEach(g=>{
-    const pct=num(g.target)>0?Math.min(100,(num(g.saved)/num(g.target))*100):0;
-    const div=document.createElement("div");div.className="goal-row";
-    div.innerHTML=`<span class="goal-name">${esc(g.name)}</span><span class="goal-amounts">${fmt(g.saved)} / ${fmt(g.target)} €</span><div class="goal-bar-wrap"><div class="goal-bar" style="width:${pct}%"></div></div><span class="goal-pct">${Math.round(pct)}%</span><button class="btn-del" onclick="removeGoal('${g.id}')">×</button>`;
-    list.appendChild(div);
-  });
+  DATA.goals.forEach(g=>list.appendChild(buildGoalRow(g)));
+}
+
+function buildGoalRow(g){
+  const pct=num(g.target)>0?Math.min(100,(num(g.saved)/num(g.target))*100):0;
+  const wrap=document.createElement("div");
+  wrap.dataset.gid=g.id;
+
+  // Ligne principale
+  const row=document.createElement("div");row.className="goal-row";
+  row.innerHTML=`
+    <div class="goal-main">
+      <div class="goal-name">${esc(g.name)}</div>
+      <div class="goal-amounts">${fmt(g.saved)} € / ${fmt(g.target)} €</div>
+    </div>
+    <div class="goal-bar-wrap"><div class="goal-bar" style="width:${pct}%"></div></div>
+    <span class="goal-pct">${Math.round(pct)}%</span>
+    <div class="goal-actions">
+      <button class="btn-goal-add" title="Ajouter un versement" onclick="toggleGoalVersement('${g.id}')">+</button>
+      <button class="btn-goal-edit" title="Modifier" onclick="toggleGoalEdit('${g.id}')">✏️</button>
+      <button class="btn-del" onclick="removeGoal('${g.id}')">×</button>
+    </div>`;
+
+  // Zone versement
+  const versDiv=document.createElement("div");versDiv.className="goal-versement";versDiv.id="gvers-"+g.id;
+  versDiv.innerHTML=`
+    <input type="number" id="ginput-${g.id}" placeholder="Montant à ajouter (€)" inputmode="decimal">
+    <button class="btn-goal-ok" onclick="addVersement('${g.id}')">+ Ajouter</button>
+    <button class="btn-goal-cancel" onclick="toggleGoalVersement('${g.id}')">✕</button>`;
+
+  // Zone édition
+  const editDiv=document.createElement("div");editDiv.className="goal-edit-row";editDiv.id="gedit-"+g.id;
+  editDiv.innerHTML=`
+    <input type="text" id="gename-${g.id}" value="${esc(g.name)}" placeholder="Nom">
+    <input type="number" id="getarget-${g.id}" value="${g.target||""}" placeholder="Objectif €" inputmode="decimal">
+    <input type="number" id="gesaved-${g.id}" value="${g.saved||""}" placeholder="Épargné €" inputmode="decimal">
+    <button class="btn-goal-ok" onclick="saveGoalEdit('${g.id}')">✓ OK</button>
+    <button class="btn-goal-cancel" onclick="toggleGoalEdit('${g.id}')">✕</button>`;
+
+  wrap.appendChild(row);wrap.appendChild(versDiv);wrap.appendChild(editDiv);
+  return wrap;
+}
+
+function toggleGoalVersement(id){
+  const el=document.getElementById("gvers-"+id);
+  const isOpen=el.classList.contains("open");
+  // Ferme tous les autres
+  document.querySelectorAll(".goal-versement.open,.goal-edit-row.open").forEach(e=>e.classList.remove("open"));
+  if(!isOpen){
+    el.classList.add("open");
+    setTimeout(()=>document.getElementById("ginput-"+id)?.focus(),60);
+  }
+}
+
+function toggleGoalEdit(id){
+  const el=document.getElementById("gedit-"+id);
+  const isOpen=el.classList.contains("open");
+  document.querySelectorAll(".goal-versement.open,.goal-edit-row.open").forEach(e=>e.classList.remove("open"));
+  if(!isOpen){
+    el.classList.add("open");
+    setTimeout(()=>document.getElementById("gename-"+id)?.focus(),60);
+  }
+}
+
+function addVersement(id){
+  const input=document.getElementById("ginput-"+id);
+  const amount=num(input.value);
+  if(!amount){input.focus();return;}
+  DATA.goals=DATA.goals.map(g=>g.id===id?{...g,saved:String(num(g.saved)+amount)}:g);
+  input.value="";
+  saveData();renderGoals();
+  showToast("+ "+fmt(amount)+" € ajoutés à la cagnotte 🎉");
+}
+
+function saveGoalEdit(id){
+  const name=document.getElementById("gename-"+id)?.value.trim();
+  const target=document.getElementById("getarget-"+id)?.value;
+  const saved=document.getElementById("gesaved-"+id)?.value;
+  if(!name)return;
+  DATA.goals=DATA.goals.map(g=>g.id===id?{...g,name,target,saved}:g);
+  saveData();renderGoals();
 }
 
 function toggleAddGoal(){
@@ -983,7 +1203,7 @@ function saveDette(){
 
 // ══════════════════════════════════════════════════════ UPDATE ALL
 function updateAll(){
-  const income=num(DATA.salary)+num(DATA.otherIncome);
+  const income=(DATA.revenus||[]).reduce((a,i)=>a+num(i.val),0);
   const expense=["fixed","variable","transport","autres"].flatMap(k=>DATA[k]||[]).reduce((a,i)=>a+num(i.val),0);
   const invested=(DATA.invest||[]).reduce((a,i)=>a+num(i.monthly),0);
   const detteOwe=(DATA.dettes||[]).filter(d=>d.type==="owe"&&!d.done).reduce((a,d)=>a+num(d.amount),0);
@@ -998,6 +1218,31 @@ function updateAll(){
   const bv=document.getElementById("m-balance");
   bc.style.background=balance>=0?"var(--green-bg)":"var(--red-bg)";
   bv.style.color=balance>=0?"var(--green)":"var(--red)";
+
+  // Taux d'épargne = (revenu - dépenses) / revenu
+  const savingsAmt=income>0?Math.max(0,income-expense):0;
+  const savingsRate=income>0?Math.min(100,(savingsAmt/income)*100):0;
+  document.getElementById("m-savings-rate").textContent=Math.round(savingsRate)+"%";
+  document.getElementById("savings-bar").style.width=savingsRate+"%";
+
+  // Fixes vs variables
+  const fixedTotal=(DATA.fixed||[]).reduce((a,i)=>a+num(i.val),0);
+  const varTotal=(DATA.variable||[]).reduce((a,i)=>a+num(i.val),0)+(DATA.transport||[]).reduce((a,i)=>a+num(i.val),0)+(DATA.autres||[]).reduce((a,i)=>a+num(i.val),0);
+  const fixedRatio=fixedTotal+varTotal>0?(fixedTotal/(fixedTotal+varTotal)*100):50;
+  document.getElementById("m-fixed-total").textContent="Fixes : "+fmt(fixedTotal)+" €";
+  document.getElementById("m-variable-total").textContent="Variables : "+fmt(varTotal)+" €";
+  document.getElementById("fixed-ratio-bar").style.width=fixedRatio+"%";
+
+  // Revenus total display
+  const trev=document.getElementById("total-revenus");if(trev)trev.textContent=fmt(income)+" €";
+  // Revenus bar %
+  const maxRev=income||1;
+  document.querySelectorAll("#cat-revenus .cat-row").forEach(r=>{
+    const v=num(r.querySelector(".cat-val-input").value);
+    const p=Math.min(100,(v/maxRev)*100);
+    r.querySelector(".cat-bar").style.width=p+"%";
+    r.querySelector(".cat-pct").textContent=Math.round(p)+"%";
+  });
 
   const pct=income>0?Math.min(100,(expense/income)*100):0;
   const bar=document.getElementById("budget-bar");
@@ -1076,7 +1321,7 @@ function updateAnnual(){
   document.getElementById("btn-prev-year").textContent="‹ "+(yi-1);
   document.getElementById("btn-next-year").textContent=(yi+1)+" ›";
   const allM=MONTHS.map((_,i)=>loadData(yi,i));
-  const inc=allM.map(d=>num(d.salary)+num(d.otherIncome));
+  const inc=allM.map(d=>(d.revenus||[]).reduce((a,i)=>a+num(i.val),0));
   const exp=allM.map(d=>["fixed","variable","transport","autres"].flatMap(k=>d[k]||[]).reduce((a,i)=>a+num(i.val),0));
   const maxBar=Math.max(...inc,...exp,1);
   document.getElementById("annual-bar-chart").innerHTML=MONTHS.map((m,i)=>`<div class="bar-col"><div class="bar-pair"><div class="bar-inc" style="height:${(inc[i]/maxBar*100).toFixed(1)}%" title="${fmt(inc[i])} €"></div><div class="bar-exp" style="height:${(exp[i]/maxBar*100).toFixed(1)}%" title="${fmt(exp[i])} €"></div></div><span class="bar-label">${m.slice(0,3)}</span></div>`).join("");
@@ -1120,7 +1365,7 @@ function getPrev(){let pm=M-1,py=Y;if(pm<0){pm=11;py--;}return{py,pm};}
 function openCopyModal(){
   const{py,pm}=getPrev();
   const prev=loadData(py,pm);
-  const hasAny=num(prev.salary)||num(prev.otherIncome)||["fixed","variable","transport","autres"].some(k=>(prev[k]||[]).length)||(prev.invest||[]).length;
+  const hasAny=(prev.revenus||[]).some(r=>num(r.val))||["fixed","variable","transport","autres"].some(k=>(prev[k]||[]).length)||(prev.invest||[]).length;
   document.getElementById("copy-modal-sub").textContent=hasAny?`Importer depuis ${MONTHS[pm]} ${py} :`:`⚠️ ${MONTHS[pm]} ${py} est vide — rien à importer.`;
   document.getElementById("copy-modal").classList.add("open");
 }
@@ -1140,11 +1385,13 @@ function confirmCopy(){
   const cInv=document.getElementById("opt-invest").classList.contains("sel");
   const cGoals=document.getElementById("opt-goals").classList.contains("sel");
   const merged=loadData(Y,M);
-  if(cRev){if(prev.salary)merged.salary=prev.salary;if(prev.otherIncome)merged.otherIncome=prev.otherIncome;}
+  if(cRev){if(prev.revenus&&prev.revenus.length)merged.revenus=JSON.parse(JSON.stringify(prev.revenus));}
   if(cDep){["fixed","variable","transport","autres"].forEach(k=>{if(prev[k]&&prev[k].length)merged[k]=JSON.parse(JSON.stringify(prev[k]));});}
   if(cInv){
     if(prev.investCats&&prev.investCats.length)merged.investCats=JSON.parse(JSON.stringify(prev.investCats));
-    if(prev.invest&&prev.invest.length)merged.invest=prev.invest.map(i=>({...JSON.parse(JSON.stringify(i)),val:"",prev:""}));
+    if(prev.invest&&prev.invest.length)
+      // La valeur actuelle du mois précédent devient "Mois précédent" du nouveau mois
+      merged.invest=prev.invest.map(i=>({...JSON.parse(JSON.stringify(i)),prev:i.val||"",val:""}));
   }
   if(cGoals&&prev.goals&&prev.goals.length)merged.goals=JSON.parse(JSON.stringify(prev.goals));
   DATA=merged;
@@ -1158,6 +1405,154 @@ function showToast(msg){
   t.textContent=msg;t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"),3000);
 }
+
+// ══════════════════════════════════════════════════════ CALCULATRICE POPUP
+let calcContext=null; // { cat, lines:[{id,name,val}] }
+
+function calcEval(expr){
+  const clean=String(expr).replace(/,/g,".").replace(/\s/g,"");
+  if(!clean||!/[0-9]/.test(clean))return null;
+  if(/[^0-9+\-*/().]/.test(clean))return null;
+  try{
+    const r=Function('"use strict";return('+clean+')')();
+    if(!isFinite(r)||isNaN(r))return null;
+    return Math.round(r*100)/100;
+  }catch(e){return null;}
+}
+
+// cat = 'fixed'|'variable'|'transport'|'autres'|'revenus'
+function openCalc(cat){
+  collectFromDOM();
+  calcContext={cat};
+
+  const titles={
+    fixed:"🏠 Logement & charges",variable:"🛒 Variable & loisirs",
+    transport:"🚗 Transport",autres:"⋯ Autres",revenus:"💼 Revenus"
+  };
+  document.getElementById("calc-popup-title").textContent=titles[cat]||cat;
+
+  const wrap=document.getElementById("calc-lines");
+  wrap.innerHTML="";
+
+  let lines=[];
+  if(cat==="revenus"){
+    lines=(DATA.revenus||[]).map(item=>({id:item.id,name:item.name,val:item.val||""}));
+  } else {
+    lines=(DATA[cat]||[]).map(item=>({id:item.id,name:item.name,val:item.val||""}));
+  }
+  calcContext.lines=lines;
+
+  lines.forEach((line,i)=>{
+    const row=document.createElement("div");
+    row.className="calc-line";
+
+    const nameEl=document.createElement("span");
+    nameEl.className="calc-line-name";
+    nameEl.textContent=line.name;
+
+    const input=document.createElement("input");
+    input.type="text";
+    input.className="calc-line-input";
+    input.inputMode="decimal";
+    input.placeholder="0";
+    input.value=line.val;
+    input.dataset.idx=i;
+
+    const preview=document.createElement("span");
+    preview.className="calc-line-preview";
+
+    // Live preview + coloring
+    input.addEventListener("input",()=>{
+      const v=input.value;
+      const hasOp=/[+\-*/]/.test(v);
+      if(hasOp){
+        input.classList.add("expr");
+        const r=calcEval(v);
+        preview.textContent=r!==null?"= "+r.toLocaleString("fr-FR")+" €":"";
+      } else {
+        input.classList.remove("expr");
+        preview.textContent="";
+      }
+      updateCalcTotal();
+    });
+
+    // Résoudre l'expression sur Entrée ou blur
+    const resolve=()=>{
+      if(/[+\-*/]/.test(input.value)){
+        const r=calcEval(input.value);
+        if(r!==null){
+          input.value=r;
+          input.classList.remove("expr");
+          preview.textContent="";
+          updateCalcTotal();
+        }
+      }
+    };
+    input.addEventListener("blur",resolve);
+    input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();resolve();input.blur();}});
+
+    row.appendChild(nameEl);
+    row.appendChild(input);
+    row.appendChild(preview);
+    wrap.appendChild(row);
+  });
+
+  updateCalcTotal();
+  document.getElementById("calc-overlay").classList.add("open");
+  // Focus premier champ vide ou premier champ
+  setTimeout(()=>{
+    const first=wrap.querySelector('.calc-line-input[value=""]')||wrap.querySelector('.calc-line-input');
+    if(first)first.focus();
+  },120);
+}
+
+function updateCalcTotal(){
+  const inputs=document.querySelectorAll("#calc-lines .calc-line-input");
+  let total=0;
+  inputs.forEach(inp=>{
+    const r=calcEval(inp.value)||num(inp.value)||0;
+    total+=r;
+  });
+  document.getElementById("calc-total").textContent=fmt(total)+" €";
+}
+
+function closeCalc(){
+  document.getElementById("calc-overlay").classList.remove("open");
+  calcContext=null;
+}
+
+function applyCalc(){
+  if(!calcContext)return;
+  const inputs=document.querySelectorAll("#calc-lines .calc-line-input");
+  const{cat,lines}=calcContext;
+
+  if(cat==="revenus"){
+    inputs.forEach((inp,i)=>{
+      if(/[+\-*/]/.test(inp.value)){const r=calcEval(inp.value);if(r!==null)inp.value=r;}
+      const lineId=lines[i]?.id;if(!lineId)return;
+      const row=document.querySelector(`#cat-revenus .cat-row[data-id="${lineId}"]`);
+      if(row){const vi=row.querySelector(".cat-val-input");if(vi)vi.value=inp.value;}
+    });
+  } else {
+    inputs.forEach((inp,i)=>{
+      if(/[+\-*/]/.test(inp.value)){const r=calcEval(inp.value);if(r!==null)inp.value=r;}
+      const lineId=lines[i]?.id;
+      if(lineId===undefined)return;
+      // Trouve la row DOM correspondante dans la section
+      const row=document.querySelector(`#cat-${cat} .cat-row[data-id="${lineId}"]`);
+      if(row){
+        const valInput=row.querySelector(".cat-val-input");
+        if(valInput)valInput.value=inp.value;
+      }
+    });
+  }
+
+  closeCalc();
+  autosave();
+  showToast("✓ Montants mis à jour");
+}
+
+
 
 // ══════════════════════════════════════════════════════ INIT
 window.addEventListener("DOMContentLoaded",()=>{load();});
