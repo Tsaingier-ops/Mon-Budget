@@ -1206,8 +1206,8 @@ function updateAll(){
   const income=(DATA.revenus||[]).reduce((a,i)=>a+num(i.val),0);
   const expense=["fixed","variable","transport","autres"].flatMap(k=>DATA[k]||[]).reduce((a,i)=>a+num(i.val),0);
   const invested=(DATA.invest||[]).reduce((a,i)=>a+num(i.monthly),0);
-  const detteOwe=(DATA.dettes||[]).filter(d=>d.type==="owe"&&!d.done).reduce((a,d)=>a+num(d.amount),0);
-  const detteOwed=(DATA.dettes||[]).filter(d=>d.type==="owed"&&!d.done).reduce((a,d)=>a+num(d.amount),0);
+  const detteOwe=(DATA.dettes||[]).filter(d=>d.type==="owe"&&d.done).reduce((a,d)=>a+num(d.amount),0);
+  const detteOwed=(DATA.dettes||[]).filter(d=>d.type==="owed"&&d.done).reduce((a,d)=>a+num(d.amount),0);
   const balance=income-expense-invested-detteOwe+detteOwed;
 
   document.getElementById("m-income").textContent=fmt(income)+" €";
